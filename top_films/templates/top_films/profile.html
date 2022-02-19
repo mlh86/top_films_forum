@@ -18,6 +18,34 @@
       <tr>
         <th>Bio:</th><td>{{ user.profile.bio }}</td>
       </tr>
+      <tr>
+        <th>Favorite Films:</th>
+        <td>
+          {% for film in user.profile.fav_films.all %}
+            {% if forloop.last %}
+              <a href="/films/film-{{ film.ranking }}">{{ film.title }}</a>
+            {% else %}
+              <a href="/films/film-{{ film.ranking }}">{{ film.title }}</a>; 
+            {% endif %}
+          {% empty %}
+            ------
+          {% endfor %}
+        </td>
+      </tr>
+      <tr>
+        <th>Films to Watch:</th>
+        <td>
+          {% for film in user.profile.films_to_watch.all %}
+            {% if forloop.last %}
+              <a href="/films/film-{{ film.ranking }}">{{ film.title }}</a>
+            {% else %}
+              <a href="/films/film-{{ film.ranking }}">{{ film.title }}</a>; 
+            {% endif %}
+          {% empty %}
+            ------
+          {% endfor %}
+        </td>
+      </tr>
     </table>
     <div class="profile-buttons">
         <button class="edit-profile" type="button" onclick="location.href='/account/edit-profile'">Edit Profile</button>

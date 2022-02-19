@@ -21,7 +21,6 @@ class RegistrationForm(forms.Form):
             self.add_error('password_confirm', "Passwords entered do not match")
         return clean_data
 
-
 class UserUpdateForm(forms.ModelForm):
     class Meta:
         model = User
@@ -31,3 +30,7 @@ class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ('bio',)
+
+
+class AddCommentForm(forms.Form):
+    comment = forms.CharField(widget=forms.Textarea)

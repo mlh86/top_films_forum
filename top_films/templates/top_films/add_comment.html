@@ -1,0 +1,18 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  {% if user.is_authenticated %}
+    <form method="POST">
+      {% csrf_token %}
+      <table class="profile-info">
+        <tr>
+          <th>Film:</th><td>{{ film.title }}</td>
+        </tr>
+        {{ form.as_table }}
+      </table>
+      <input class='submit-comment-btn' type="submit" value="Submit Comment"/>
+    </form>
+  {% else %}
+    <div class="log-in-reminder">You must be logged in to post a comment.</div>
+  {% endif %}
+{% endblock %}

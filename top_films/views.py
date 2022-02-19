@@ -1,13 +1,14 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
+from django.http import JsonResponse
 from django.contrib import messages
 from django.db.models import Count
 from django.views import generic
 from django.urls import reverse
 
-from .forms import RegistrationForm, UserUpdateForm, ProfileUpdateForm
-from .models import User, Profile, Film, Person, Genre, Language
+from .forms import RegistrationForm, UserUpdateForm, ProfileUpdateForm, AddCommentForm
+from .models import User, Profile, Film, Person, Genre, Language, Comment
 
 
 def index_view(request):
@@ -55,6 +56,10 @@ def update_profile_view(request):
         'profile_form': profile_form
     })
 
+def user_info_view(request, pk):
+    user = get_object_or_404(User, id=pk)
+    return render(request, 'top_films/user_info_view.html', {'profiled_user': user})
+
 
 class FilmListView(generic.ListView):
     model = Film
@@ -63,6 +68,42 @@ class FilmListView(generic.ListView):
 def film_detail_view(request, ranking):
     film = get_object_or_404(Film, ranking=ranking)
     return render(request, 'top_films/film_detail.html', {'film': film})
+
+def is_ajax(request):
+    return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
+
+def fave_film(request):
+    if is_ajax(request) and request.method == 'POST':
+        p = request.user.profile
+        f = Film.objects.get(id=int(request.POST['film_id']))
+        if f in p.fav_films.all():
+            p.fav_films.remove(f)
+        else:
+            p.fav_films.add(f)
+        return JsonResponse({"op_succeeded": True}, status=200)
+    return JsonResponse({"op_succeeded": False}, status=400)
+
+def watchlist_film(request):
+    if is_ajax(request) and request.method == 'POST':
+        p = request.user.profile
+        f = Film.objects.get(id=int(request.POST['film_id']))
+        if f in p.films_to_watch.all():
+            p.films_to_watch.remove(f)
+        else:
+            p.films_to_watch.add(f)
+        return JsonResponse({"op_succeeded": True}, status=200)
+    return JsonResponse({"op_succeeded": False}, status=400)
+
+def add_comment_view(request, ranking):
+    film = get_object_or_404(Film, ranking=ranking)
+    if request.method == 'POST':
+        form = AddCommentForm(request.POST)
+        if form.is_valid():
+            Comment.objects.create(comment=form.cleaned_data['comment'], author=request.user, film=film)
+            return redirect('film-detail', film.ranking)
+    else:
+        form = AddCommentForm()
+    return render(request, 'top_films/add_comment.html', {'film':film, 'form': form})
 
 
 class GenreListView(generic.ListView):
@@ -100,3 +141,11 @@ class ActorDetailView(generic.DetailView):
     model = Person
     template_name = 'top_films/actor_detail.html'
     context_object_name = 'actor'
+
+def actor_search(request):
+    if request.method == "POST" and request.POST['actor_name']:
+        actors = Person.objects.all().annotate(num_acted=Count('films_acted_in')).filter(
+            num_acted__gt=0).filter(name__icontains=request.POST['actor_name']).order_by('name')
+        return render(request, 'top_films/actor_list.html', {'object_list': actors})
+    else:
+        return redirect('actors')

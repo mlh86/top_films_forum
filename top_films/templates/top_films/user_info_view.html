@@ -1,0 +1,43 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <table class="profile-info">
+    <tr>
+      <th>Username:</th><td>{{ profiled_user.username }}</td>
+    </tr>
+    <tr>
+      <th>Member Since:</th><td>{{ profiled_user.date_joined }}</td>
+    </tr>
+    <tr>
+      <th>Bio:</th><td>{{ profiled_user.profile.bio }}</td>
+    </tr>
+    <tr>
+      <th>Favorite Films:</th>
+      <td>
+        {% for film in profiled_user.profile.fav_films.all %}
+          {% if forloop.last %}
+            <a href="/films/film-{{ film.ranking }}">{{ film.title }}</a>
+          {% else %}
+            <a href="/films/film-{{ film.ranking }}">{{ film.title }}</a>; 
+          {% endif %}
+        {% empty %}
+          ------
+        {% endfor %}
+      </td>
+    </tr>
+    <tr>
+      <th>Films to Watch:</th>
+      <td>
+        {% for film in profiled_user.profile.films_to_watch.all %}
+          {% if forloop.last %}
+            <a href="/films/film-{{ film.ranking }}">{{ film.title }}</a>
+          {% else %}
+            <a href="/films/film-{{ film.ranking }}">{{ film.title }}</a>; 
+          {% endif %}
+        {% empty %}
+          ------
+        {% endfor %}
+      </td>
+    </tr>
+  </table>
+{% endblock %}

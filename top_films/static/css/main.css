@@ -47,11 +47,13 @@ p.index-body {
 table.profile-info {
     margin-top: 30px;
     margin-left: 40px;
+    max-width:1080px;
 }
 
 table.profile-info th, table.profile-info td {
     font-size: 20px;
     line-height: 24px;
+    min-width: 150px;
 }
 
 table.profile-info th {
@@ -94,7 +96,6 @@ div.profile-buttons button {
 
 .film-details .film-title {
     font-size: 60px;
-    margin-top: 20px;
     margin-left: -2px;
     line-height: 80px;
 }
@@ -102,6 +103,32 @@ div.profile-buttons button {
 .film-details .year-lang span,
 .film-details .ratings span {
     padding-right: 25px;
+}
+
+.remove-film-btn {
+    background: #aa3333;
+    color: #ffff88;
+    padding: 10px;
+    font-weight: bold;
+}
+
+.add-film-btn {
+    background: #ffff88;
+    color: #aa3333;
+    font-weight: bold;
+    padding: 9px;
+}
+
+.film-buttons button:hover {
+    background: #dd6633;
+    color: #ffffff;
+}
+
+.add-comment-btn {
+    background: #ffff88;
+    color: #aa3333;
+    font-weight: bold;
+    font-size: 26px;
 }
 
 .film-plot, .film-comments {
@@ -126,6 +153,18 @@ tr.comment-author td {
     padding-bottom: 40px;
 }
 
+.submit-comment-btn {
+    margin-left: 410px;
+    background: #dd6633 !important;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.log-in-reminder {
+    font-size: 20px;
+    margin: 20px;
+}
+
 .object-list-heading {
     font-size: 30px;
     margin: 20px;
@@ -145,4 +184,16 @@ div.pagination {
 
 .muted {
     color: #888888;
+}
+.created_at {
+    color: #aaaaaa;
+}
+
+form.actor-search {
+    margin-left: 10px;
+    margin-bottom: 25px;
+}
+
+form.actor-search input[type="submit"] {
+    background: #dd6633;
 }

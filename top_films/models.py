@@ -132,6 +132,7 @@ class Comment(models.Model):
     comment = models.TextField()
     film = models.ForeignKey('Film', on_delete=models.CASCADE)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         if len(self.comment) < 120:

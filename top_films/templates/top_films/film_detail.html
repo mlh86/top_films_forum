@@ -48,6 +48,20 @@
               {% endif %}
             {% endfor %}
         </div>
+        {% if user.is_authenticated %}
+          <div class="film-buttons">
+            {% if film in user.profile.fav_films.all %}
+              <button class="remove-film-btn fav_btn" film_id="{{ film.id }}">Remove from Favs</button>
+            {% else %}
+              <button class="add-film-btn fav_btn" film_id="{{ film.id }}">Add to Favs</button>
+            {% endif %}
+            {% if film in user.profile.films_to_watch.all %}
+              <button class="remove-film-btn to_watch_btn" film_id="{{ film.id }}">Remove from Watchlist</button>
+            {% else %}
+              <button class="add-film-btn to_watch_btn" film_id="{{ film.id }}">Add to Watchlist</button>
+            {% endif %}
+          </div>
+        {% endif %}
     </div>
   </div>
   <div class='film-plot'>
@@ -55,13 +69,56 @@
     <div>{{ film.plot }}</div>
   </div>
   <div class='film-comments'>
-    <div class='sub-heading'>Comments</div>
+    <div class='sub-heading'>Comments <button class="add-comment-btn" onclick="location.href='/films/add-comment/film-{{ film.ranking }}'">+</button></div>
     <table class="comments-list">
-        {% for comment in film.comment_set.all %}
-          <tr><td>{{ comment.comment }}</td></tr>
-          <tr class="comment-author"><td>- <a href="">{{ comment.author.username }}</a></td></tr>
-        {% endfor %}
+      {% for comment in film.comment_set.all %}
+        <tr><td>{{ comment.comment }}</td></tr>
+        <tr class="comment-author">
+          <td>- <a href="/user/{{ comment.author.id }}">{{ comment.author.username }}</a><span class="created_at"> @ {{ comment.created_at }}</span></td>
+        </tr>
+      {% endfor %}
     </table>
     </div>
   </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script>
+    $('.fav_btn').click(function(){
+      $.ajax({
+        type: "POST",
+        url: "{% url 'fave-film' %}",
+        data: {'film_id': $(this).attr('film_id'), 'csrfmiddlewaretoken': '{{ csrf_token }}'},
+        dataType: "json",
+        success: function(response) {
+          if ($('.fav_btn').hasClass('add-film-btn')) {
+            $('.fav_btn').removeClass('add-film-btn').addClass('remove-film-btn');
+            $('.fav_btn').text("Remove from Favs")
+          }
+          else {
+            $('.fav_btn').removeClass('remove-film-btn').addClass('add-film-btn');
+            $('.fav_btn').text("Add to Favs")
+          }
+        }
+      });
+    });
+    $('.to_watch_btn').click(function(){
+      $.ajax({
+        type: "POST",
+        url: "{% url 'watchlist-film' %}",
+        data: {'film_id': $(this).attr('film_id'), 'csrfmiddlewaretoken': '{{ csrf_token }}'},
+        dataType: "json",
+        success: function(response) {
+          if ($('.to_watch_btn').hasClass('add-film-btn')) {
+            $('.to_watch_btn').removeClass('add-film-btn').addClass('remove-film-btn');
+            $('.to_watch_btn').text("Remove from Watchlist")
+          }
+          else {
+            $('.to_watch_btn').removeClass('remove-film-btn').addClass('add-film-btn');
+            $('.to_watch_btn').text("Add to Watchlist")
+          }
+        }
+      });
+    });
+  </script>
+
 {% endblock %}

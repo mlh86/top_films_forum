@@ -29,4 +29,10 @@
       </span>
     </div>
   {% endif %}
+
+  <form method="post" action="/films/actor-search" class="actor-search">
+    {% csrf_token %}
+    <input type="text" id="actor_name" name="actor_name">
+    <input type="submit" value="Search" />
+  </form>
 {% endblock %}
