@@ -1,0 +1,11 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <p class="index-body">Welcome to the forum dedicated to discussing the top 100 films of all time</p>
+    <p class="index-body">Click <a href="/films">here</a> to see the list of films.</p>
+    <div class="top-ten-films">
+        {% for film in top_ten_films %}
+          <a href="{% url 'film-detail' film.ranking %}"><img src="{{ film.poster_url }}" height="200px"></a>
+        {% endfor %}
+    </div>
+{% endblock %}

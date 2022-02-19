@@ -1,0 +1,67 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <div class='film-details-container'>
+    <div class="film-poster">
+      <img src="{{ film.poster_url }}" height="450px">
+    </div>
+    <div class="film-details">
+        <div class="film-title">
+            <a href="https://www.imdb.com/title/{{ film.ttcode }}">{{ film.title }}</a>
+        </div>
+        <div class="year-lang">
+            <span>Language: <a href="/films/languages/{{ film.language.slug }}">{{ film.language.name }}</a></span>
+            <span>Year: {{ film.year }}</span>
+        </div>
+        <div class="ratings">
+            <span>Ranking: #{{ film.ranking }}</span>
+            <span>IMDB Rating: {{ film.imdb_rating}}</span>
+            <span>Metascore: {{ film.meta_score }}</span>
+        </div>
+        <div class="directors">
+            <span>Directed by: </span>
+            {% for director in film.directors.all %}
+              {% if forloop.last %}
+                <a href="/films/directors/{{ director.slug }}">{{ director.name }}</a>
+              {% else %}
+                <a href="/films/directors/{{ director.slug }}">{{ director.name }}</a>, 
+              {% endif %}
+            {% endfor %}
+        </div>
+        <div class="actors">
+            <span>Starring: </span>
+            {% for actor in film.actors.all %}
+              {% if forloop.last %}
+                <a href="/films/actors/{{ actor.slug }}">{{ actor.name }}</a>
+              {% else %}
+                <a href="/films/actors/{{ actor.slug }}">{{ actor.name }}</a>, 
+              {% endif %}
+            {% endfor %}
+        </div>
+        <div class="genres">
+            <span>Genres: </span>
+            {% for genre in film.genres.all %}
+              {% if forloop.last %}
+                <a href="/films/genres/{{ genre.slug }}">{{ genre.name }}</a>
+              {% else %}
+                <a href="/films/genres/{{ genre.slug }}">{{ genre.name }}</a>, 
+              {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+  </div>
+  <div class='film-plot'>
+    <div class='sub-heading'>Plot</div>
+    <div>{{ film.plot }}</div>
+  </div>
+  <div class='film-comments'>
+    <div class='sub-heading'>Comments</div>
+    <table class="comments-list">
+        {% for comment in film.comment_set.all %}
+          <tr><td>{{ comment.comment }}</td></tr>
+          <tr class="comment-author"><td>- <a href="">{{ comment.author.username }}</a></td></tr>
+        {% endfor %}
+    </table>
+    </div>
+  </div>
+{% endblock %}

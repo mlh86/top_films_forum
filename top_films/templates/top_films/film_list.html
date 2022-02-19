@@ -1,0 +1,12 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <ol class="films-list">
+    {% for film in film_list %}
+      <li>
+        <img src="{{ film.poster_url }}" height="120px" width="86px">
+        <a href="/films/film-{{ film.ranking }}">{{ film.title }}</a>
+      </li>
+    {% endfor %}
+  </ol>
+{% endblock %}

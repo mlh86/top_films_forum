@@ -1,11 +1,15 @@
 from django.db import models
 from django.core.validators import MinLengthValidator
 from django.utils.html import mark_safe, format_html
+from django.db.models.signals import post_save
+from django.contrib.auth.models import User
+from django.utils.text import slugify
+from django.dispatch import receiver
 from django.urls import reverse
 
 class Film(models.Model):
     """The core model class representing a film"""
-    title = models.CharField(max_length=300, validators=[MinLengthValidator(1)])
+    title = models.CharField(max_length=300, validators=[MinLengthValidator(1)], unique=True)
     ttcode = models.CharField(max_length=12, validators=[MinLengthValidator(1)], verbose_name="IMDB Code")
     ranking = models.IntegerField(verbose_name="IMDB Ranking")
     imdb_rating = models.FloatField(verbose_name="IMDB Rating")
@@ -67,14 +71,19 @@ def show_film_links(film_set, empty_val=""):
 
 class Person(models.Model):
     """A class representing a film-related person"""
-    name = models.CharField(max_length=200)
+    name = models.CharField(max_length=200, unique=True)
     notes = models.TextField(null=True, blank=True)
+    slug = models.SlugField(unique=True)
 
     class Meta:
         verbose_name_plural = "People"
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
 
     def display_acting_credits(self):
         return show_film_links(self.films_acted_in.all())
@@ -86,10 +95,15 @@ class Person(models.Model):
 
 
 class Genre(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
+    slug = models.SlugField(unique=True)
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
 
     def display_films(self):
         return show_film_links(self.films.all())
@@ -98,7 +112,8 @@ class Genre(models.Model):
 
 
 class Language(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
+    slug = models.SlugField(unique=True)
 
     def display_films(self):
         return show_film_links(self.film_set.all())
@@ -108,13 +123,39 @@ class Language(models.Model):
     def __str__(self):
         return self.name
 
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
+
 
 class Comment(models.Model):
     comment = models.TextField()
     film = models.ForeignKey('Film', on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         if len(self.comment) < 120:
             return self.comment
         else:
             return self.comment[0:117] + "..."
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    bio = models.TextField(null=True, blank=True)
+    fav_films = models.ManyToManyField('Film', related_name='favorited_by')
+    films_to_watch = models.ManyToManyField('Film', related_name='on_watchlist_of')
+
+    def __str__(self):
+        return self.user.username
+
+    def display_fav_films(self):
+        return show_film_links(self.fav_films.all())
+    display_fav_films.short_description = "Favorite Films"
+    display_fav_films.allow_tags = True
+
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, created, **kwargs):
+    if not hasattr(instance, 'profile'):
+        Profile.objects.create(user=instance)
+    instance.profile.save()

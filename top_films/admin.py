@@ -3,8 +3,10 @@ from django.db import models
 from django.db.models import Count
 from django.forms import TextInput, ModelForm
 from django.core.exceptions import ValidationError
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from django.contrib.auth.models import User
 
-from .models import Film, Person, Genre, Language, Comment
+from .models import Film, Person, Genre, Language, Comment, Profile
 
 admin.site.site_title = "Top 100 Films"
 admin.site.site_header = "Top 100 Films - Admin Panel"
@@ -135,5 +137,18 @@ class LanguageAdmin(admin.ModelAdmin):
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ['comment', 'film']
-    search_fields = ['comment', 'film__title']
+    list_display = ['comment', 'film', 'author']
+    search_fields = ['comment', 'film__title', 'author__username']
+
+
+class ProfileInline(admin.StackedInline):
+    model = Profile
+    can_delete = False
+    fields = ['bio', 'display_fav_films']
+    readonly_fields = ['bio', 'display_fav_films']
+
+class UserAdmin(BaseUserAdmin):
+    inlines = (ProfileInline,)
+
+admin.site.unregister(User)
+admin.site.register(User, UserAdmin)

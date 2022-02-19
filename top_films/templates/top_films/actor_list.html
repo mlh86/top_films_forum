@@ -1,0 +1,32 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <div class="object-list-heading">Actors</div>
+  <ul class="objects-list">
+    {% for object in object_list %}
+      <li>
+        <a href="{% url 'actor-detail' object.slug %}">{{ object.name }}</a>
+      </li>
+    {% endfor %}
+  </ul>
+
+  {% if is_paginated %}
+    <div class="pagination">
+      <span class="page-links">
+        {% if page_obj.has_previous %}
+          <a href="/films/actors?page={{ page_obj.previous_page_number }}">Prev. Page</a>
+        {% else %}
+          <span class='muted'>Prev. Page</span>
+        {% endif %}
+        <span class="page-current">
+          -- Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }} --
+        </span>
+        {% if page_obj.has_next %}
+          <a href="/films/actors?page={{ page_obj.next_page_number }}">Next Page</a>
+        {% else %}
+          <span class='muted'>Next Page</span>
+        {% endif %}
+      </span>
+    </div>
+  {% endif %}
+{% endblock %}

@@ -1,13 +1,28 @@
 {% extends "admin/base.html" %}
 
-{% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
+{% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | {{ site_title|default:_('Top 100 Films') }}{% endblock %}
 
-{% load static %}
+{% load i18n static %}
 
 {% block extrastyle %}<link rel="stylesheet" type="text/css" href='{% static "css/admin-extra.css" %}' />{% endblock %}
 
 {% block branding %}
-<h1 id="site-name"><a href="{% url 'admin:index' %}">{{ site_header|default:_('Django administration') }}</a></h1>
+  {% if 'admin' in request.path %}
+    <h1 id="site-name"><a href="{% url 'admin:index' %}">{{ site_header|default:_('Top 100 Films') }}</a></h1>
+  {% else %}
+    <h1 id="site-name"><a href="{% url 'index' %}">{{ site_header|default:_('Top 100 Films') }}</a></h1>
+  {% endif %}
+{% endblock %}
+
+{% block breadcrumbs %}
+  <div class="breadcrumbs">
+  {% if 'admin' in request.path %}
+    <a href="{% url 'admin:index' %}">{% translate 'Home' %}</a>
+  {% else %}
+    <a href="{% url 'index' %}">{% translate 'Home' %}</a>
+  {% endif %}
+  {% if title %} &rsaquo; {{ title }}{% endif %}
+  </div>
 {% endblock %}
 
 {% block nav-global %}{% endblock %}

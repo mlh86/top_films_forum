@@ -1,0 +1,12 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <div class="object-list-heading">Directors</div>
+  <ul class="objects-list">
+    {% for object in object_list %}
+      <li>
+        <a href="{% url 'director-detail' object.slug %}">{{ object.name }}</a>
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock %}

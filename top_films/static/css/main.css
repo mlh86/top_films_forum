@@ -1,0 +1,148 @@
+div.navbar {
+    background: #dd6633;
+    color: #ffff88;
+    padding: 8px;
+    display: flex;
+    font-size: 18px;
+}
+
+div.nav_links {
+    flex: auto;
+    text-align: left;
+}
+
+div.auth_links {
+    flex: auto;
+    text-align: right;
+}
+
+div.navbar a {
+    color: #ffffff;
+}
+
+div.top-banner {
+    background: #aa3333;
+    font-size: 64px;
+    padding: 20px;
+    font-weight: bold;
+    text-align: center;
+    color: #ffff88;
+}
+
+p.index-body {
+    font-size: 20px;
+    text-align: center;
+    margin-top: 24px;
+}
+
+.top-ten-films {
+    display: flex;
+}
+
+.top-ten-films a {
+    flex: auto;
+    margin-left: 28px;
+}
+
+table.profile-info {
+    margin-top: 30px;
+    margin-left: 40px;
+}
+
+table.profile-info th, table.profile-info td {
+    font-size: 20px;
+    line-height: 24px;
+}
+
+table.profile-info th {
+    color: #aa3333;
+}
+
+div.profile-buttons {
+    margin-top: 20px;
+    margin-left: 40px;
+}
+
+div.profile-buttons button {
+    margin: 5px;
+    padding: 10px;
+    background: #dd6633;
+    color: #ff8;
+    font-size: 14px;
+}
+
+.films-list li {
+    padding-top: 20px;
+    font-size: 20px;
+}
+
+.films-list li img {
+    vertical-align: middle;
+    margin-right: 8px;
+    margin-left: 4px;
+}
+
+.film-details-container {
+    display: flex;
+}
+
+.film-details {
+    margin: 40px;
+    font-size: 30px;
+    line-height: 50px;
+}
+
+.film-details .film-title {
+    font-size: 60px;
+    margin-top: 20px;
+    margin-left: -2px;
+    line-height: 80px;
+}
+
+.film-details .year-lang span,
+.film-details .ratings span {
+    padding-right: 25px;
+}
+
+.film-plot, .film-comments {
+    margin-top: 30px;
+    margin-left: 40px;
+    margin-bottom: 30px;
+    font-size: 20px;
+}
+
+.sub-heading {
+    margin-bottom: 20px;
+    font-size: 30px;
+    color: #aa3333;
+}
+
+table.comments-list td {
+    font-size: 20px;
+    line-height: 24px;
+}
+
+tr.comment-author td {
+    padding-bottom: 40px;
+}
+
+.object-list-heading {
+    font-size: 30px;
+    margin: 20px;
+}
+
+.objects-list li {
+    font-size: 20px;
+    line-height: 30px;
+}
+
+div.pagination {
+    margin-left: 10px;
+    margin-top: 20px;
+    margin-bottom: 30px;
+    font-size: 16px;
+}
+
+.muted {
+    color: #888888;
+}

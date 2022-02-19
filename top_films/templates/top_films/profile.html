@@ -1,0 +1,29 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  {% if user.is_authenticated %}
+    <table class="profile-info">
+      <tr>
+        <th>Username:</th><td>{{ user.username }}</td>
+      </tr>
+      <tr>
+        <th>First name:</th><td>{{ user.first_name }}</td>
+      </tr>
+      <tr>
+        <th>Last name:</th><td>{{ user.last_name }}</td>
+      </tr>
+      <tr>
+        <th>Email:</th><td>{{ user.email }}</td>
+      </tr>
+      <tr>
+        <th>Bio:</th><td>{{ user.profile.bio }}</td>
+      </tr>
+    </table>
+    <div class="profile-buttons">
+        <button class="edit-profile" type="button" onclick="location.href='/account/edit-profile'">Edit Profile</button>
+        <button class="change-pwd" type="button" onclick="location.href='/account/password_change'">Change Password</button>
+    </div>
+  {% else %}
+    <p class="login-msg">Please login to view your profile.</p>
+  {% endif %}
+{% endblock %}

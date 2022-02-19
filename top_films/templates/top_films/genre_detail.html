@@ -1,0 +1,13 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <div class="object-list-heading">{{ genre.name }}</div>
+  <ul class="films-list">
+    {% for film in genre.films.all %}
+      <li>
+        <img src="{{ film.poster_url }}" height="120px" width="86px">
+        <a href="/films/film-{{ film.ranking }}">{{ film.title }}</a>
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock %}

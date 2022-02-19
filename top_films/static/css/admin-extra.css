@@ -12,7 +12,7 @@
     font-size: 14px;
 }
 
-.module caption {
+.module caption, .module h2, .inline-group h2 {
     background: #aa3333 !important;
 }
 
@@ -20,13 +20,21 @@
     color: #ffff88 !important;
 }
 
+#content-related .module h2 {
+    color: #ffff88 !important;
+}
+
+.selector .selector-available h2 {
+    color: #ffff88 !important;
+}
+
 div.breadcrumbs {
-    background: #ff6633 !important;
+    background: #dd6633 !important;
     color: #ffff88;
 }
 
 .button, input[type="submit"], input[type="button"], .submit-row input, a.button {
-    background: #ff6633 !important;
+    background: #dd6633 !important;
 }
 
 input[type="submit"].default, .submit-row input.default {
@@ -43,4 +51,14 @@ input[type="submit"].default, .submit-row input.default {
 
 #changelist .actions .button {
     color: #ffff88 !important;
+}
+
+div.change-pwd-submit {
+    background: none !important;
+    border: 0px !important;
+}
+
+div.change-pwd-submit input {
+    float: left !important;
+    margin-left: 202px !important;
 }
