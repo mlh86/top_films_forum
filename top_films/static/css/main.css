@@ -160,6 +160,14 @@ tr.comment-author td {
     font-weight: bold;
 }
 
+.del-comment-btn {
+    padding: 3px;
+    background: #dd6633;
+    color: #ffff88;
+    font-size: 14px;
+    float: right;
+}
+
 .log-in-reminder {
     font-size: 20px;
     margin: 20px;

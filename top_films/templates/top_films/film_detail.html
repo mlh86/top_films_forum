@@ -74,7 +74,12 @@
       {% for comment in film.comment_set.all %}
         <tr><td>{{ comment.comment }}</td></tr>
         <tr class="comment-author">
-          <td>- <a href="/user/{{ comment.author.id }}">{{ comment.author.username }}</a><span class="created_at"> @ {{ comment.created_at }}</span></td>
+          <td>
+            - <a href="/user/{{ comment.author.id }}">{{ comment.author.username }}</a><span class="created_at"> @ {{ comment.created_at }}</span>
+            {% if user.is_staff %}
+              <button class='del-comment-btn' comment_id="{{ comment.id }}">Delete</button>
+            {% endif %}
+          </td>
         </tr>
       {% endfor %}
     </table>
@@ -116,6 +121,19 @@
             $('.to_watch_btn').removeClass('remove-film-btn').addClass('add-film-btn');
             $('.to_watch_btn').text("Add to Watchlist")
           }
+        }
+      });
+    });
+    $('.del-comment-btn').click(function(){
+      var self = this;
+      $.ajax({
+        type: "POST",
+        url: "{% url 'delete-comment' %}",
+        data: {'comment_id': $(this).attr('comment_id'), 'csrfmiddlewaretoken': '{{ csrf_token }}'},
+        dataType: "json",
+        success: function(response) {
+          $(self).parents('tr').prev().remove();
+          $(self).parents('tr').remove();
         }
       });
     });

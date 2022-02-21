@@ -26,8 +26,8 @@ def registration_view(request):
         if form.is_valid():
             data = form.cleaned_data
             if not User.objects.filter(username=data['username']):
-                usr = User.objects.create(username=data['username'],first_name=data['first_name'],
-                                          last_name=data['last_name'],email=data['email'],password=data['password'])
+                usr = User.objects.create_user(username=data['username'],first_name=data['first_name'],
+                                               last_name=data['last_name'],email=data['email'],password=data['password'])
                 usr.profile.bio = data['bio']
                 login(request, usr)
                 return redirect('profile')
@@ -104,6 +104,13 @@ def add_comment_view(request, ranking):
     else:
         form = AddCommentForm()
     return render(request, 'top_films/add_comment.html', {'film':film, 'form': form})
+
+def delete_comment_view(request):
+    if is_ajax(request) and request.method == 'POST':
+        c = Comment.objects.get(id=int(request.POST['comment_id']))
+        c.delete()
+        return JsonResponse({"op_succeeded": True}, status=200)
+    return JsonResponse({"op_succeeded": False}, status=400)
 
 
 class GenreListView(generic.ListView):

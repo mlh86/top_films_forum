@@ -7,6 +7,7 @@ urlpatterns = [
     path('watchlist-film', views.watchlist_film, name="watchlist-film"),
     path('fave-film', views.fave_film, name="fave-film"),
     path('add-comment/film-<int:ranking>', views.add_comment_view, name="add-comment"),
+    path('delete-comment', views.delete_comment_view, name="delete-comment"),
     path('genres', views.GenreListView.as_view(), name="genres"),
     path('genres/<slug:slug>', views.GenreDetailView.as_view(), name="genre-detail"),
     path('directors', views.DirectorListView.as_view(), name="directors"),
