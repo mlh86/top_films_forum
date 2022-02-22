@@ -1,3 +1,5 @@
+"""Custom AppConfig in order to set verbose_name properly"""
+
 from django.apps import AppConfig
 
 

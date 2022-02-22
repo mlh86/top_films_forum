@@ -1,3 +1,5 @@
+"""List of app URLs residing under /films/"""
+
 from django.urls import path
 from . import views
 

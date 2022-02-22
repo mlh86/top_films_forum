@@ -1,3 +1,11 @@
+"""
+This project centers around the Film model, and makes use of various
+auxiliary models such as Genre, Person, Director. The aim is to create
+a website dedicated to the top 100 IMDB films, and allow visitors to
+log in and leave comments about the various films. The User model
+is thus extended using a Profile model via a One2One relationship.
+"""
+
 from django.db import models
 from django.core.validators import MinLengthValidator
 from django.utils.html import mark_safe, format_html
@@ -6,6 +14,7 @@ from django.contrib.auth.models import User
 from django.utils.text import slugify
 from django.dispatch import receiver
 from django.urls import reverse
+
 
 class Film(models.Model):
     """The core model class representing a film"""
@@ -59,18 +68,19 @@ class Film(models.Model):
 
 
 def show_film_links(film_set, empty_val=""):
+    """Returns an HTML snippet containing links to the admin-detail page of each film in film_set"""
     if not film_set:
         return empty_val
-    else:
-        film_links = []
-        for film in film_set:
-            edit_url = reverse('admin:top_films_film_change', args=(film.id,))
-            film_links.append(f'<a href="{edit_url}">{film.title}</a>')
-        return format_html(', '.join(film_links))
+
+    film_links = []
+    for film in film_set:
+        edit_url = reverse('admin:top_films_film_change', args=(film.id,))
+        film_links.append(f'<a href="{edit_url}">{film.title}</a>')
+    return format_html(', '.join(film_links))
 
 
 class Person(models.Model):
-    """A class representing a film-related person"""
+    """A class representing a film-related person, be it an actor or a director"""
     name = models.CharField(max_length=200, unique=True)
     notes = models.TextField(null=True, blank=True)
     slug = models.SlugField(unique=True)
@@ -95,6 +105,7 @@ class Person(models.Model):
 
 
 class Genre(models.Model):
+    """Simple model representing a film genre"""
     name = models.CharField(max_length=100, unique=True)
     slug = models.SlugField(unique=True)
 
@@ -112,6 +123,7 @@ class Genre(models.Model):
 
 
 class Language(models.Model):
+    """Simple model representing a film's primary language"""
     name = models.CharField(max_length=100, unique=True)
     slug = models.SlugField(unique=True)
 
@@ -129,6 +141,7 @@ class Language(models.Model):
 
 
 class Comment(models.Model):
+    """Represents a comment left by a user on a film's page"""
     comment = models.TextField()
     film = models.ForeignKey('Film', on_delete=models.CASCADE)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -137,11 +150,11 @@ class Comment(models.Model):
     def __str__(self):
         if len(self.comment) < 120:
             return self.comment
-        else:
-            return self.comment[0:117] + "..."
+        return self.comment[0:117] + "..."
 
 
 class Profile(models.Model):
+    """Profile model used to extend the User model with misc data fields"""
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(null=True, blank=True)
     fav_films = models.ManyToManyField('Film', related_name='favorited_by')
